@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "268854806625",
+    "project_id": "vle3-cmsc4303-f22-mobileapps",
+    "storage_bucket": "vle3-cmsc4303-f22-mobileapps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:268854806625:android:9162013e6061a91595c220",
+        "android_client_info": {
+          "package_name": "edu.uco.vle3.cmsc4303.lesson4"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "268854806625-fvrgtqjbi8lr13mmugb4omk09bl9qdt4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDG5poew4QmjjygUcicQLubLWrHroYGvBA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "268854806625-fvrgtqjbi8lr13mmugb4omk09bl9qdt4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "268854806625-2n3r7l4221gb0or5rq69jvelt3ei02rk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "edu.uco.vle3.cmsc4303.lesson4"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
