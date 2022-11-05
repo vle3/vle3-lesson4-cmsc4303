@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:lesson4/viewscreen/startdispatcher.dart';
+import 'package:lesson4/viewscreen/view/createphotomemo_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -19,7 +20,9 @@ class PhotoMemoApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: StartDispatcher.routeName,
       routes: {
-        StartDispatcher.routeName: (context) => StartDispatcher(),
+        StartDispatcher.routeName: (context) => const StartDispatcher(),
+        CreatePhotoMemoScreen.routeName: (context) =>
+            const CreatePhotoMemoScreen(),
       },
     );
   }

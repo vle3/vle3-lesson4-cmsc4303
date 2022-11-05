@@ -1,6 +1,11 @@
+// ignore_for_file: avoid_print
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lesson4/controller/auth_controller.dart';
+import 'package:lesson4/model/constants.dart';
 import 'package:lesson4/model/signin_screen_model.dart';
+import 'package:lesson4/viewscreen/view/view_util.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -33,7 +38,9 @@ class _SignInState extends State<SignInScreen> {
           'Sign In',
         ),
       ),
-      body: signInForm(),
+      body: screenModel.isSignInUnderWay
+          ? const Center(child: CircularProgressIndicator())
+          : signInForm(),
     );
   }
 
@@ -90,12 +97,29 @@ class _Controller {
     if (!currentState.validate()) return;
     currentState.save();
 
+    state.render(() {
+      state.screenModel.isSignInUnderWay = true;
+    });
+
     try {
       await Auth.signIn(
           email: state.screenModel.email!,
           password: state.screenModel.password!);
+      //FirebaseAuth.instance.authStateChange() will be trigger
+    } on FirebaseAuthException catch (e) {
+      state.render(() => state.screenModel.isSignInUnderWay = false);
+      var error = 'Sign In Error! Reason: ${e.code} ${e.message ?? ""}';
+      if (Constant.devMode) {
+        print('================= $error');
+      }
+      showSnackBar(context: state.context, seconds: 20, message: error);
     } catch (e) {
-      print('$e');
+      state.render(() => state.screenModel.isSignInUnderWay = false);
+      if (Constant.devMode) {
+        print('================= Sign In Error! $e');
+      }
+      showSnackBar(
+          context: state.context, seconds: 20, message: 'Sign in Error! $e');
     }
   }
 }

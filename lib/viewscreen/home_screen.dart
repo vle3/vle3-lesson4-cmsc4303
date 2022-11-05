@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lesson4/controller/auth_controller.dart';
+import 'package:lesson4/viewscreen/view/createphotomemo_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -25,14 +26,21 @@ class _HomeState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Home',
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Home',
+          ),
+        ),
+        drawer: drawerView(),
+        body: Text('home: ${Auth.user?.email!}'),
+        floatingActionButton: FloatingActionButton(
+          onPressed: con.addButton,
+          child: const Icon(Icons.add),
         ),
       ),
-      drawer: drawerView(),
-      body: Text('home: ${Auth.user?.email!}'),
     );
   }
 
@@ -55,5 +63,9 @@ class _Controller {
 
   void signOut() {
     Auth.signOut();
+  }
+
+  void addButton() {
+    Navigator.pushNamed(state.context, CreatePhotoMemoScreen.routeName);
   }
 }
