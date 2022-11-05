@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lesson4/controller/auth_controller.dart';
+import 'package:lesson4/controller/firestore_controller.dart';
 import 'package:lesson4/controller/storage_controller.dart';
 import 'package:lesson4/model/constants.dart';
 import 'package:lesson4/model/createphotomemo_screen_model.dart';
@@ -167,9 +168,29 @@ class _Controller {
             });
             print('=========== uploading: $progress %');
           });
-      print('======= ${result[ArgKey.filename]}');
-      print('======= ${result[ArgKey.downloadURL]}');
+      state.render(
+          () => state.screenModel.progressMessage = 'Saving photomemo...');
+      state.screenModel.tempMemo.photoFilename = result[ArgKey.filename]!;
+      state.screenModel.tempMemo.photoURL = result[ArgKey.downloadURL]!;
+      state.screenModel.tempMemo.createdBy = state.screenModel.user.email!;
+      state.screenModel.tempMemo.timestamp =
+          DateTime.now(); // milisecond since from 1970
+
+      String docId = await FirestoreController.addPhotoMemo(
+          photoMemo: state.screenModel.tempMemo);
+      state.screenModel.tempMemo.docId = docId;
+      state.screenModel.progressMessage = null;
+
+      // When buildContext is used from a StatefulWidget
+      // the moutn property must be checked after an async gap
+      if (!state.mounted) return;
+
+      Navigator.of(state.context).pop(state.screenModel.tempMemo);
+
+      // print('======= ${result[ArgKey.filename]}');
+      // print('======= ${result[ArgKey.downloadURL]}');
     } catch (e) {
+      state.render(() => state.screenModel.progressMessage = null);
       if (Constant.devMode) {
         print('***************** upload photo/doc error: $e');
       }
