@@ -6,6 +6,7 @@ import 'package:lesson4/controller/firestore_controller.dart';
 import 'package:lesson4/model/constants.dart';
 import 'package:lesson4/model/home_screen_model.dart';
 import 'package:lesson4/model/photomemo.dart';
+import 'package:lesson4/viewscreen/detailview_screen.dart';
 import 'package:lesson4/viewscreen/view/createphotomemo_screen.dart';
 import 'package:lesson4/viewscreen/view/webimage.dart';
 
@@ -93,6 +94,7 @@ class _HomeState extends State<HomeScreen> {
                 Text('Timestamp: ${photoMemo.timestamp}'),
               ],
             ),
+            onTap: () => con.onTap(index),
           );
         }),
       );
@@ -145,5 +147,13 @@ class _Controller {
         state.screenModel.loadingErrorMessage = '$e';
       });
     }
+  }
+
+  void onTap(int index) {
+    Navigator.pushNamed(
+      state.context,
+      DetailViewScreen.routeName,
+      arguments: state.screenModel.photoMemoList![index],
+    );
   }
 }
