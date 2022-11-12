@@ -42,8 +42,8 @@ class _HomeState extends State<HomeScreen> {
       onWillPop: () => Future.value(false),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Home',
+          title: Text(
+            'Home: ${screenModel.user.email}',
           ),
         ),
         drawer: drawerView(),
