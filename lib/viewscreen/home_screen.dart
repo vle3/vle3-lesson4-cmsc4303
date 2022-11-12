@@ -7,6 +7,7 @@ import 'package:lesson4/model/constants.dart';
 import 'package:lesson4/model/home_screen_model.dart';
 import 'package:lesson4/model/photomemo.dart';
 import 'package:lesson4/viewscreen/detailview_screen.dart';
+import 'package:lesson4/viewscreen/sharedwith_screen.dart';
 import 'package:lesson4/viewscreen/view/createphotomemo_screen.dart';
 import 'package:lesson4/viewscreen/view/webimage.dart';
 
@@ -80,6 +81,7 @@ class _HomeState extends State<HomeScreen> {
               url: photoMemo.photoURL,
               context: context,
             ),
+            trailing: const Icon(Icons.arrow_right),
             title: Text(photoMemo.title),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,13 +105,30 @@ class _HomeState extends State<HomeScreen> {
 
   Widget drawerView() {
     return Drawer(
-      child: ListView(children: [
-        ListTile(
-          leading: const Icon(Icons.logout),
-          title: const Text('Sign out'),
-          onTap: con.signOut,
-        )
-      ]),
+      child: ListView(
+        children: [
+          UserAccountsDrawerHeader(
+            currentAccountPicture: const Icon(
+              Icons.person,
+              size: 70.0,
+            ),
+            accountName: const Text('No profile'),
+            accountEmail: Text(
+              screenModel.user.email!,
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.people),
+            title: const Text('Shared With'),
+            onTap: con.sharedWith,
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Sign out'),
+            onTap: con.signOut,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -149,11 +168,31 @@ class _Controller {
     }
   }
 
-  void onTap(int index) {
-    Navigator.pushNamed(
+  void onTap(int index) async {
+    final updated = await Navigator.pushNamed(
       state.context,
       DetailViewScreen.routeName,
       arguments: state.screenModel.photoMemoList![index],
     );
+
+    if (updated == null) return;
+
+    //update screen
+    state.render(() {
+      state.screenModel.photoMemoList!.sort((a, b) {
+        if (a.timestamp!.isBefore(b.timestamp!)) {
+          return 1;
+        } else if (a.timestamp!.isAfter(b.timestamp!)) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+    });
+  }
+
+  void sharedWith() {
+    // navigate to sharedWith screen
+    Navigator.popAndPushNamed(state.context, SharedWithScreen.routeName);
   }
 }

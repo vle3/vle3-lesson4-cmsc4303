@@ -40,6 +40,32 @@ class PhotoMemo {
           ]; // ... spread operator, copy every element in sharedWith parameter to sharedWith object
   }
 
+  PhotoMemo clone() {
+    PhotoMemo copy = PhotoMemo(
+      docId: docId,
+      createdBy: createdBy,
+      title: title,
+      memo: memo,
+      photoFilename: photoFilename,
+      photoURL: photoURL,
+      timestamp: timestamp,
+    );
+    copy.sharedWith = [...sharedWith];
+    return copy;
+  }
+
+  void copyFrom(PhotoMemo p) {
+    docId = p.docId;
+    createdBy = p.createdBy;
+    title = p.title;
+    memo = p.memo;
+    photoFilename = p.photoFilename;
+    photoURL = p.photoURL;
+    timestamp = p.timestamp;
+    sharedWith.clear();
+    sharedWith.addAll(p.sharedWith);
+  }
+
   Map<String, dynamic> toFireStoreDoc() {
     return {
       DocKeyPhotoMemo.title.name: title,

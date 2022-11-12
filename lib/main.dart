@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:lesson4/model/photomemo.dart';
 import 'package:lesson4/viewscreen/detailview_screen.dart';
+import 'package:lesson4/viewscreen/sharedwith_screen.dart';
 import 'package:lesson4/viewscreen/startdispatcher.dart';
 import 'package:lesson4/viewscreen/view/createphotomemo_screen.dart';
 import 'package:lesson4/viewscreen/view/error_screen.dart';
@@ -26,6 +27,7 @@ class PhotoMemoApp extends StatelessWidget {
         StartDispatcher.routeName: (context) => const StartDispatcher(),
         CreatePhotoMemoScreen.routeName: (context) =>
             const CreatePhotoMemoScreen(),
+        SharedWithScreen.routeName: (context) => const SharedWithScreen(),
         DetailViewScreen.routeName: (context) {
           Object? args = ModalRoute.of(context)?.settings.arguments;
           if (args == null) {

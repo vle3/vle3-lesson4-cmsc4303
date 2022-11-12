@@ -30,4 +30,30 @@ class FirestoreController {
     }
     return result;
   }
+
+  static Future<void> updatePhotoMemo(
+      {required String docId, required Map<String, dynamic> update}) async {
+    await FirebaseFirestore.instance
+        .collection(photoMemoCollection)
+        .doc(docId)
+        .update(update);
+  }
+
+  static Future<List<PhotoMemo>> getSharedWithList(
+      {required String email}) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(photoMemoCollection)
+        .where(DocKeyPhotoMemo.sharedWith.name, arrayContains: email)
+        .orderBy(DocKeyPhotoMemo.timestamp.name, descending: true)
+        .get();
+    var result = <PhotoMemo>[];
+    for (var doc in querySnapshot.docs) {
+      if (doc.data() != null) {
+        var document = doc.data() as Map<String, dynamic>;
+        var p = PhotoMemo.fromFireStoreDoc(doc: document, docId: doc.id);
+        result.add(p);
+      }
+    }
+    return result;
+  }
 }
