@@ -3,12 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:lesson4/controller/auth_controller.dart';
 import 'package:lesson4/controller/firestore_controller.dart';
+import 'package:lesson4/controller/storage_controller.dart';
 import 'package:lesson4/model/constants.dart';
 import 'package:lesson4/model/home_screen_model.dart';
 import 'package:lesson4/model/photomemo.dart';
 import 'package:lesson4/viewscreen/detailview_screen.dart';
 import 'package:lesson4/viewscreen/sharedwith_screen.dart';
 import 'package:lesson4/viewscreen/view/createphotomemo_screen.dart';
+import 'package:lesson4/viewscreen/view/view_util.dart';
 import 'package:lesson4/viewscreen/view/webimage.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -45,6 +47,14 @@ class _HomeState extends State<HomeScreen> {
           title: Text(
             'Home: ${screenModel.user.email}',
           ),
+          actions: [
+            if (screenModel.deleteIndex != null)
+              IconButton(
+                onPressed: con.delete,
+                icon: Icon(Icons.delete),
+                color: Colors.redAccent[100],
+              ),
+          ],
         ),
         drawer: drawerView(),
         body: bodyView(),
@@ -77,10 +87,15 @@ class _HomeState extends State<HomeScreen> {
         itemBuilder: ((context, index) {
           PhotoMemo photoMemo = screenModel.photoMemoList![index];
           return ListTile(
-            leading: WebImage(
-              url: photoMemo.photoURL,
-              context: context,
-            ),
+            selected: screenModel.deleteIndex == index,
+            selectedTileColor: Colors.redAccent[100],
+            leading:
+                screenModel.deleteInProgress && screenModel.deleteIndex == index
+                    ? const CircularProgressIndicator()
+                    : WebImage(
+                        url: photoMemo.photoURL,
+                        context: context,
+                      ),
             trailing: const Icon(Icons.arrow_right),
             title: Text(photoMemo.title),
             subtitle: Column(
@@ -97,6 +112,7 @@ class _HomeState extends State<HomeScreen> {
               ],
             ),
             onTap: () => con.onTap(index),
+            onLongPress: () => con.onLongPress(index),
           );
         }),
       );
@@ -137,6 +153,17 @@ class _Controller {
   _HomeState state;
   _Controller(this.state);
 
+  void onLongPress(int index) {
+    state.render(() {
+      if (state.screenModel.deleteIndex == null ||
+          state.screenModel.deleteIndex != index) {
+        state.screenModel.deleteIndex = index;
+      } else {
+        state.screenModel.deleteIndex = null;
+      }
+    });
+  }
+
   void signOut() {
     Auth.signOut();
   }
@@ -169,6 +196,13 @@ class _Controller {
   }
 
   void onTap(int index) async {
+    if (state.screenModel.deleteIndex != null) {
+      state.render(() {
+        state.screenModel.deleteIndex = null;
+      });
+      return;
+    }
+
     final updated = await Navigator.pushNamed(
       state.context,
       DetailViewScreen.routeName,
@@ -194,5 +228,33 @@ class _Controller {
   void sharedWith() {
     // navigate to sharedWith screen
     Navigator.popAndPushNamed(state.context, SharedWithScreen.routeName);
+  }
+
+  Future<void> delete() async {
+    state.render(() {
+      state.screenModel.deleteInProgress = true;
+    });
+    PhotoMemo p =
+        state.screenModel.photoMemoList![state.screenModel.deleteIndex!];
+    try {
+      await FirestoreController.deleteDoc(docId: p.docId!);
+      await StorageController.deleteFile(filename: p.photoFilename);
+      state.render(() {
+        state.screenModel.photoMemoList!
+            .removeAt(state.screenModel.deleteIndex!);
+        state.screenModel.deleteIndex = null;
+        state.screenModel.deleteInProgress = false;
+      });
+    } catch (e) {
+      state.render(() {
+        state.screenModel.deleteIndex = null;
+        state.screenModel.deleteInProgress = false;
+      });
+      if (Constant.devMode) print('======= failed to delete: $e');
+      showSnackBar(
+          context: state.context,
+          message:
+              'failed to delete! Sign out and in again to get the updated list');
+    }
   }
 }

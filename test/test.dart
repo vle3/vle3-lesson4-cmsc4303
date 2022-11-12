@@ -10,7 +10,7 @@ void main() async {
   }
 }
 
-getAll() async{
+getAll() async {
   var db = FirebaseFirestore.instance;
   final docRef = db.collection("cities").doc("SF");
   // docRef.get().then(
@@ -25,7 +25,7 @@ getAll() async{
     final data = doc.data() as Map<String, dynamic>;
     // ...
   } catch (e) {
-    print("Error getting document: $e"),
+    print("Error getting document: $e");
   }
 }
 

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:lesson4/controller/auth_controller.dart';
 import 'package:lesson4/model/constants.dart';
 import 'package:lesson4/model/signin_screen_model.dart';
+import 'package:lesson4/viewscreen/createaccount_screen.dart';
 import 'package:lesson4/viewscreen/view/view_util.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -79,7 +80,16 @@ class _SignInState extends State<SignInScreen> {
                 'Sign In',
                 style: Theme.of(context).textTheme.button,
               ),
-            )
+            ),
+            const SizedBox(
+              height: 12.0,
+            ),
+            TextButton(
+              onPressed: con.createAccount,
+              child: const Text(
+                'Need an account? Click here to create',
+              ),
+            ),
           ]),
         ),
       ),
@@ -121,5 +131,10 @@ class _Controller {
       showSnackBar(
           context: state.context, seconds: 20, message: 'Sign in Error! $e');
     }
+  }
+
+  void createAccount() {
+    //navigate to creat account screen
+    Navigator.pushNamed(state.context, CreateAccountScreen.routeName);
   }
 }

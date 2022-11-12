@@ -56,4 +56,11 @@ class FirestoreController {
     }
     return result;
   }
+
+  static Future<void> deleteDoc({required String docId}) async {
+    await FirebaseFirestore.instance
+        .collection(photoMemoCollection)
+        .doc(docId)
+        .delete();
+  }
 }

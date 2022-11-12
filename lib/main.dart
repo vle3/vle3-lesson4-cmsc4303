@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:lesson4/model/photomemo.dart';
+import 'package:lesson4/viewscreen/createaccount_screen.dart';
 import 'package:lesson4/viewscreen/detailview_screen.dart';
 import 'package:lesson4/viewscreen/sharedwith_screen.dart';
 import 'package:lesson4/viewscreen/startdispatcher.dart';
@@ -36,7 +37,8 @@ class PhotoMemoApp extends StatelessWidget {
             var photoMemo = args as PhotoMemo;
             return DetailViewScreen(photoMemo: photoMemo);
           }
-        }
+        },
+        CreateAccountScreen.routeName: (context) => const CreateAccountScreen(),
       },
     );
   }
