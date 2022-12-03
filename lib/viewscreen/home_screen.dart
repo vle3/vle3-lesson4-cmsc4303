@@ -8,6 +8,7 @@ import 'package:lesson4/model/constants.dart';
 import 'package:lesson4/model/home_screen_model.dart';
 import 'package:lesson4/model/photomemo.dart';
 import 'package:lesson4/viewscreen/detailview_screen.dart';
+import 'package:lesson4/viewscreen/myinventory_screen.dart';
 import 'package:lesson4/viewscreen/sharedwith_screen.dart';
 import 'package:lesson4/viewscreen/view/createphotomemo_screen.dart';
 import 'package:lesson4/viewscreen/view/view_util.dart';
@@ -139,6 +140,11 @@ class _HomeState extends State<HomeScreen> {
             onTap: con.sharedWith,
           ),
           ListTile(
+            leading: const Icon(Icons.inventory),
+            title: const Text('My Inventory'),
+            onTap: con.myInventory,
+          ),
+          ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Sign out'),
             onTap: con.signOut,
@@ -228,6 +234,11 @@ class _Controller {
   void sharedWith() {
     // navigate to sharedWith screen
     Navigator.popAndPushNamed(state.context, SharedWithScreen.routeName);
+  }
+
+  void myInventory() {
+    // navigate to inventory screen
+    Navigator.popAndPushNamed(state.context, MyInventoryScreen.routeName);
   }
 
   Future<void> delete() async {

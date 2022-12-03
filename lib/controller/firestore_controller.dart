@@ -1,8 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lesson4/model/item.dart';
 import 'package:lesson4/model/photomemo.dart';
 
 class FirestoreController {
   static const photoMemoCollection = 'photomemo_collection';
+  static const inventoryCollection = 'inventory';
+
+  static Future<String> addItem({required Item item}) async {
+    DocumentReference ref = await FirebaseFirestore.instance
+        .collection(inventoryCollection)
+        .add(item.toFireStoreDoc());
+    return ref.id;
+  }
 
   static Future<String> addPhotoMemo({required PhotoMemo photoMemo}) async {
     DocumentReference ref = await FirebaseFirestore.instance

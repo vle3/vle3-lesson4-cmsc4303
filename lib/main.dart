@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:lesson4/model/photomemo.dart';
 import 'package:lesson4/viewscreen/createaccount_screen.dart';
 import 'package:lesson4/viewscreen/detailview_screen.dart';
+import 'package:lesson4/viewscreen/myinventory_screen.dart';
 import 'package:lesson4/viewscreen/sharedwith_screen.dart';
 import 'package:lesson4/viewscreen/startdispatcher.dart';
 import 'package:lesson4/viewscreen/view/createphotomemo_screen.dart';
@@ -29,6 +30,7 @@ class PhotoMemoApp extends StatelessWidget {
         CreatePhotoMemoScreen.routeName: (context) =>
             const CreatePhotoMemoScreen(),
         SharedWithScreen.routeName: (context) => const SharedWithScreen(),
+        MyInventoryScreen.routeName: (context) => const MyInventoryScreen(),
         DetailViewScreen.routeName: (context) {
           Object? args = ModalRoute.of(context)?.settings.arguments;
           if (args == null) {
